@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cart">
+
+    <insert id="insert">
+        insert into cart (cart_id, userid, product_id, amount)
+            values (seq_cart.nextval, #{userid}, #{product_id}, #{amount})
+    </insert>
+
+    <update id="modify">
+       update cart set amount=#{amount} where cart_id=#{cart_id}
+    </update>
+
+    <delete id="delete">
+        delete from cart where cart_id=#{cart_id}
+    </delete>
+
+    <delete id="deleteAll">
+        delete from cart where userid=#{userid}
+    </delete>
+
+    <select id="listCart" resultType="com.example.spring02.model.shop.dto.CartDTO">
+        select cart_id, p.product_id, c.userid, name, product_name, amount, price, (price*amount) money
+        from member m, cart c, product p
+        where m.userid=c.userid and c.product_id=p.product_id and c.userid=#{userid}
+        order by cart_id
+    </select>
+
+    <select id="sumMoney" resultType="int">
+        select nvl(sum(price*amount), 0)
+        from cart c, product p
+        where c.product_id=p.product_id and userid=#{userid}
+    </select>
+
+    <select id="cart_money" resultType="com.example.spring02.model.shop.dto.CartDTO">
+        select product_name, sum(price*amount) money
+        from cart c, product p
+        where c.product_id=p.product_id
+        group by product_name
+        order by product_name
+    </select>
+</mapper>

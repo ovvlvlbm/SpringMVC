@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="product">
+
+    <insert id="insert">
+        insert into product values
+        (seq_product.nextval, #{product_name}, #{price}, #{description}, #{picture_url})
+    </insert>
+
+    <update id="update">
+       update product
+        set product_name=#{product_name},
+            price=#{price},
+            description=#{desctiption},
+            picture_url=#{picture_url}
+        where product_id=#{product_id}
+    </update>
+
+    <select id="file_info" resultType="String">
+        select picture_url from product
+        where product_id=#{product_id}
+    </select>
+
+    <delete id="delete">
+        delete product where product_id=#{product_id}
+    </delete>
+
+    <select id="list_product" resultType="com.example.spring02.model.shop.dto.ProductDTO">
+        select * from product order by product_id
+    </select>
+
+    <select id="detail_product" resultType="com.example.spring02.model.shop.dto.ProductDTO">
+        select * from product where product_id=#{product_id}
+    </select>
+
+</mapper>
