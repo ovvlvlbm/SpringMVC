@@ -2,15 +2,17 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://mybatis.org/schema/mybatis-spring
-       https://mybatis.org/schema/mybatis-spring.xsd">
+       https://mybatis.org/schema/mybatis-spring.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 
     <mybatis:scan base-package="com.example.spring02.model.memo"/>
+    <tx:annotation-driven/>
 
-<!-- Oracle dataSource -->
+    <!-- Oracle dataSource -->
     <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
         <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
         <property name="url" value="jdbc:oracle:thin:@localhost:1521/xe"/>
@@ -18,7 +20,7 @@
         <property name="password" value="1234"/>
     </bean>
 
-<!-- mybatis SqlSession -->
+    <!-- mybatis SqlSession -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="configLocation" value="classpath:/mybatis-config.xml"/>
@@ -29,4 +31,7 @@
         <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"/>
     </bean>
 
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
 </beans>

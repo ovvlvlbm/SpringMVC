@@ -50,6 +50,11 @@
                             로그아웃 되었습니다.
                         </div>
                     </c:if>
+                    <c:if test="${param.message == 'nologin'}">
+                        <div style="color:blue;">
+                            로그인하신 후 사용하세요.
+                        </div>
+                    </c:if>
                 </td>
             </tr>
         </table>

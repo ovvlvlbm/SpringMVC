@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <mvc:annotation-driven/>
+    <aop:aspectj-autoproxy/>
 
     <!--    애너테이션에 따라 빈 자동으로 주입    -->
     <context:component-scan base-package="com.example.spring02"/>
 
     <mvc:resources mapping="/include/**" location="/WEB-INF/views/include/"/>
     <mvc:resources mapping="/images/**" location="/WEB-INF/views/images/"/>
+    <mvc:resources mapping="/json/**" location="/WEB-INF/views/json/"/>
+
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/views/"/>
@@ -21,8 +26,34 @@
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="maxUploadSize" value="10485760"/>
     </bean>
-
+    <!--    첨부파일을 저장할 디렉토리   -->
     <bean id="uploadPath" class="java.lang.String">
         <constructor-arg value="d:/DEV/upload"/>
     </bean>
+
+    <!--    인터셉터 bean   -->
+    <bean id="sampleInterceptor" class="com.example.spring02.interceptor.SampleInterceptor"/>
+    <bean id="loginInterceptor" class="com.example.spring02.interceptor.LoginInterceptor"/>
+    <bean id="adminInterceptor" class="com.example.spring02.interceptor.AdminInterceptor"/>
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!--url pattern-->
+            <mvc:mapping path="/shop/**"/>
+            <!--실행할 인터셉터 지정-->
+            <ref bean="sampleInterceptor"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/shop/cart/insert.do"/>
+            <mvc:mapping path="/shop/cart/list.do"/>
+            <mvc:mapping path="/chart/**"/>
+            <ref bean="loginInterceptor"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/shop/product/write.do"/>
+            <mvc:mapping path="/shop/product/insert.do"/>
+            <ref bean="adminInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 </beans>

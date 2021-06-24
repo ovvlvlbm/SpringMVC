@@ -3,6 +3,7 @@
 <head>
     <title>Title</title>
     <%@ include file="../include/header.jsp"%>
+    <%@ include file="../include/session_check.jsp"%>
     <script>
         function product_write(){
             var product_name = document.form1.product_name.value;

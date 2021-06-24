@@ -1,15 +1,22 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<a href="${path}/">Home</a>  <%--작동--%>
-<a href="${path}/memo/list.do">메모장</a>
-<a href="${path}/upload/uploadForm">업로드</a>  <%--작동--%>
-<a href="${path}/shop/product/list.do">상품목록</a>
-<a href="${path}/shop/cart/list.do">장바구니</a>
-
+<a href="${path}/">Home</a> |
+<a href="${path}/memo/list.do">메모장</a> |
+<a href="${path}/upload/uploadForm">업로드</a> |
+<a href="${path}/shop/product/list.do">상품목록</a> |
+<a href="${path}/shop/cart/list.do">장바구니</a> |
 <c:if test="${sessionScope.admin_userid != null}">
-    <a href="${path}/shop/product/write.do">상품등록</a>
+    <a href="${path}/shop/product/write.do">상품등록</a> |
 </c:if>
+
+<a href="${path}/pdf/list.do">PDF</a> |
+<a href="${path}/chart/chart1.do">구글차트(json)</a> |
+<a href="${path}/chart/chart2.do">구글차트(db)</a> |
+<a href="${path}/jchart/chart1.do">JFreeChart(png)</a> |
+<a href="${path}/jchart/chart2.do">JFreeChart(pdf)</a> |
+
+
 
 <div style="text-align:right;">
     <c:choose>
@@ -24,3 +31,4 @@
         </c:otherwise>
     </c:choose>
 </div>
+<hr>
