@@ -15,8 +15,7 @@
 <a href="${path}/chart/chart2.do">구글차트(db)</a> |
 <a href="${path}/jchart/chart1.do">JFreeChart(png)</a> |
 <a href="${path}/jchart/chart2.do">JFreeChart(pdf)</a> |
-
-
+<a href="${path}/upload/uploadAjax">업로드(ajax)</a>
 
 <div style="text-align:right;">
     <c:choose>
