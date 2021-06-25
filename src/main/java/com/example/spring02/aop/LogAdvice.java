@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
-@Component
-@Aspect
+@Component //bean managed by spring
+@Aspect //advice class supports AOP
 public class LogAdvice {
 
     @Around("execution(* com.example.spring02.controller..*Controller.*(..))" +
@@ -16,18 +16,22 @@ public class LogAdvice {
             " || execution(* com.example.spring02.model..dao.*Impl.*(..))")
     public Object logPrint(ProceedingJoinPoint joinPoint) throws Throwable {
         long start=System.currentTimeMillis();
+
+        //Main action
         Object result = joinPoint.proceed();
         String type=joinPoint.getSignature().getDeclaringTypeName();
         String name="";
 
-        if(type.indexOf("Controller") > -1){
+        if(type.contains("Controller")){ //type.indexOf("Controller") > -1
             name="Controller \t: ";
-        }else if(type.indexOf("Service") > -1){
+        }else if(type.contains("Service")){
             name="ServiceImpl \t: ";
-        }else if(type.indexOf("DAO") > -1){
+        }else if(type.contains("DAO")){
             name="DAOImpl \t: ";
         }
+        //method name
         System.out.println(name+type+"."+joinPoint.getSignature().getName()+"()");
+        //parameter list
         System.out.println(Arrays.toString(joinPoint.getArgs()));
 
         long end=System.currentTimeMillis();

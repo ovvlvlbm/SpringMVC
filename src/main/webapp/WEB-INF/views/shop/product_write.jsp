@@ -4,22 +4,33 @@
     <title>Title</title>
     <%@ include file="../include/header.jsp"%>
     <%@ include file="../include/session_check.jsp"%>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="${path}/WEB-INF/views/summernote/summernote.min.css" rel="stylesheet">
+    <script src="${path}/WEB-INF/views/summernote/summernote.min.js"></script>
+    <script>
+        $(function(){
+            $("#description").summernote({
+               height: 300, width: 800
+            });
+        });
+    </script>
     <script>
         function product_write(){
             var product_name = document.form1.product_name.value;
             var price = document.form1.price.value;
             var description = document.form1.description.value;
-            if(product_name==""){
+            if(product_name===""){
                 alert("상품명을 입력하세요.");
                 document.form1.product_name.focus();
                 return;
             }
-            if(price==""){
+            if(price===""){
                 alert("가격을 입력하세요.");
                 document.form1.price.focus();
                 return;
             }
-            if(description==""){
+            if(description===""){
                 alert("상품설명을 입력하세요.");
                 document.form1.description.focus();
                 return;
@@ -44,7 +55,11 @@
             </tr>
             <tr>
                 <td>상품설명</td>
-                <td><textarea rows="5" cols="60" name="description" id="description"></textarea></td>
+                <td><textarea rows="5" cols="60" name="description" id="description"></textarea>
+                    <script>
+                        CKEDITOR.replace("description");
+                    </script>
+                </td>
             </tr>
             <tr>
                 <td>상품이미지</td>

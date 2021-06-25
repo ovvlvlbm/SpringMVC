@@ -15,7 +15,8 @@
     <mvc:resources mapping="/include/**" location="/WEB-INF/views/include/"/>
     <mvc:resources mapping="/images/**" location="/WEB-INF/views/images/"/>
     <mvc:resources mapping="/json/**" location="/WEB-INF/views/json/"/>
-
+    <mvc:resources mapping="/ckeditor/**" location="/WEB-INF/views/ckeditor/"/>
+    <mvc:resources mapping="/summernote/**" location="/WEB-INF/views/summernote/"/>
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/views/"/>

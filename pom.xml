@@ -123,25 +123,25 @@
         </dependency>
 
 
-<!--  파일업로드  -->
+<!--  file upload  -->
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
             <version>1.4</version>
         </dependency>
-<!-- 이미지썸네일생성 -->
+<!-- image thumbnail -->
         <dependency>
             <groupId>org.imgscalr</groupId>
             <artifactId>imgscalr-lib</artifactId>
             <version>4.2</version>
         </dependency>
-<!-- 애너테이션 사용 -->
+<!-- annotation -->
         <dependency>
             <groupId>javax.annotation</groupId>
             <artifactId>javax.annotation-api</artifactId>
             <version>1.3.2</version>
         </dependency>
-<!-- pdf 만들기(itextpdf) -->
+<!-- PDF maker(itextpdf) -->
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
@@ -167,7 +167,7 @@
             <artifactId>xmlworker</artifactId>
             <version>5.5.13.2</version>
         </dependency>
-<!-- 차트 -->
+<!-- charts -->
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
@@ -178,7 +178,17 @@
             <artifactId>jfreechart</artifactId>
             <version>1.5.3</version>
         </dependency>
-
+<!-- email -->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.5.0-b01</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${org.springframework-version}</version>
+        </dependency>
     </dependencies>
 
 

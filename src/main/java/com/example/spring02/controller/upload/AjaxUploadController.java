@@ -17,26 +17,28 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 @Controller
 public class AjaxUploadController {
+    @Resource(name = "uploadPath") //from servlet.xml
+    String uploadPath;
 
-    @Resource(name = "uploadPath")
-    String uploadPath; //servlet.xml에 설정해두었던 파일업로드 경로
-
+    //GET
     @RequestMapping(value = "/upload/uploadAjax", method = RequestMethod.GET)
     public String uploadAjax(){
         return "/upload/uploadAjax";
     }
-
+    //POST
     @RequestMapping(value = "/upload/uploadAjax", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-    @ResponseBody
+    @ResponseBody //data is returned to body part instead of view.
     public ResponseEntity<String> uploadAjax(MultipartFile file) throws Exception { //view가 아닌 데이터를 리턴하는 Method
         System.out.println("originalName: " + file.getOriginalFilename());
         System.out.println("size: "+file.getSize());
         System.out.println("contentType: " + file.getContentType());
-        //파일업로드 후 파일이름 리턴
-        return new ResponseEntity<String>(UploadFileUtils.uploadFile(uploadPath, file.getOriginalFilename(), file.getBytes()), HttpStatus.OK);
+        //After uploading, return the filename.
+        return new ResponseEntity<>(UploadFileUtils.uploadFile(uploadPath, Objects.requireNonNull(file.getOriginalFilename()), file.getBytes()), HttpStatus.OK);
     }
 
     @ResponseBody
@@ -59,15 +61,15 @@ public class AjaxUploadController {
                 //파일의 컨텐트타입 지정
                 headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
                 //파일이름을 서유럽언어 형식으로 지정하여 url에서 깨지지 않도록 처리
-                fileName = new String(fileName.getBytes("utf-8"), "iso-8859-1");
+                fileName = new String(fileName.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
                 //헤더에 첨부파일 정보 추가
                 headers.add("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
             }
             //파일내용 리턴
-            entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), headers, HttpStatus.OK);
+            entity = new ResponseEntity<>(IOUtils.toByteArray(in), headers, HttpStatus.OK);
         } catch(Exception e){
             e.printStackTrace();
-            entity = new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } finally {
             if(in!=null)
                 in.close();
@@ -77,7 +79,7 @@ public class AjaxUploadController {
 
     @ResponseBody
     @RequestMapping(value = "/upload/deleteFile", method = RequestMethod.POST)
-    public ResponseEntity<String> deleteFile(String fileName){
+    public ResponseEntity<String> deleteFile(String fileName) {
         //파일의 확장자
         String formatName = fileName.substring(fileName.lastIndexOf(".")+1);
         MediaType mType = MediaUtils.getMediaType(formatName);
@@ -85,14 +87,32 @@ public class AjaxUploadController {
             String front = fileName.substring(0,12);
             String end = fileName.substring(14);
             //썸네일 삭제
-            new File(uploadPath + (front+end).replace('/', File.separatorChar)).delete();
+            File thumbnail = new File(uploadPath + (front+end).replace('/',File.separatorChar));
+            if(thumbnail.exists()){
+                try {
+                    if(thumbnail.delete()){
+                        System.out.println("The deletion has been completed.");
+                    }else{
+                        System.out.println("The deletion has been failed.");
+                    }
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        //파일삭제
-        new File(uploadPath + fileName.replace('/',File.separatorChar)).delete();
+        //파일삭제. If a file exists, try to delete it.
+        File file = new File(uploadPath+fileName.replace('/',File.separatorChar));
+        if(file.exists()){
+            try {
+                if(file.delete()){
+                    System.out.println("The deletion has been completed.");
+                }else{
+                    System.out.println("The deletion has been failed.");
+                }
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
         return new ResponseEntity<String>("deleted", HttpStatus.OK);
     }
-
-
-
-
 }

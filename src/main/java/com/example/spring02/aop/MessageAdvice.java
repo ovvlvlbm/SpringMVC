@@ -23,7 +23,10 @@ public class MessageAdvice {
     @Around("execution(* com.example.spring02.service.message.MessageService*.*(..))")
     public Object timeLog(ProceedingJoinPoint pjp) throws Throwable {
         long start = System.currentTimeMillis();
+
+        //Main action
         Object result = pjp.proceed();
+
         long end = System.currentTimeMillis();
         System.out.println(pjp.getSignature().getName()+":"+(end-start));
         System.out.println("=====================================");

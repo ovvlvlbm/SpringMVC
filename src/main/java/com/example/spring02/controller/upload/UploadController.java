@@ -13,28 +13,34 @@ import java.util.UUID;
 
 @Controller
 public class UploadController {
-    //xml 리소스에서 bean의 id가 uploadPath인 태그 참조
-    @Resource(name="uploadPath")
+
+    @Resource(name="uploadPath")    //ref to the tag which has uploadPath id from servlet.xml.
     String uploadPath;
 
+    //GET
     @RequestMapping(value = "/upload/uploadForm", method= RequestMethod.GET)
     public String uploadForm(){
         return "upload/uploadForm";
     }
 
+    //POST
     @RequestMapping(value = "/upload/uploadForm", method = RequestMethod.POST)
     public ModelAndView uploadForm(MultipartFile file,ModelAndView mav) throws Exception{
+        //Name of an attached file.
         String savedName = file.getOriginalFilename();
+        //Add UUID to filename.
         savedName = uploadFile(savedName, file.getBytes());
+        //Name of JSP page
         mav.setViewName("upload/uploadResult");
+
         mav.addObject("savedName", savedName);
-        return mav; //uploadResult.jsp로 포워딩
+        return mav; //Forwarding to uploadResult.jsp
     }
 
     private String uploadFile(String originalName, byte[] fileData) throws Exception{
-        //uuid(Universal Unique IDentifier, 범용 고유 식별자)
+        //uuid(Universal Unique Identifier, 범용 고유 식별자)
         UUID uid = UUID.randomUUID();
-        String savedName = uid.toString()+"_"+originalName;
+        String savedName = uid +"_"+originalName;
         File target=new File(uploadPath, savedName);
         FileCopyUtils.copy(fileData, target);
         return savedName;

@@ -5,4 +5,4 @@
 <c:set var="path" value="${pageContext.request.contextPath}"/> <%--이클립스에서는 value="/spring02"--%>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <%--이클립스에서는 href="${path}/include/style.css"--%>
-<%--<link rel="stylesheet" href="${path}/WEB-INF/views/include/style.css"/>--%>
+<link rel="stylesheet" href="${path}/WEB-INF/views/include/style.css"/>

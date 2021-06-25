@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+
+    <select id="getAttach" resultType="String">
+        select fullName from attach where bno=#{bno} order by regdate
+    </select>
+
+    <delete id="deleteAttach">
+        delete from attach where fullName=#{fullName}
+    </delete>
+
+    <insert id="insert">
+        insert into board(bno, title, content, writer, show) values ((seq_board.nextval), #{title}, #{content}, #{writer}, 'Y')
+    </insert>
+
+    <insert id="addAttach">
+        insert into attach(fullName, bno) values (#{fullName}, seq_board.currval)
+    </insert>
+
+    <insert id="updateAttach">
+        insert into attach (fullName, bno) values (#{fullName}, #{bno})
+    </insert>
+
+    <select id="countArticle" resultType="int">
+        select count(*) from board b, member m
+        <include refid="search"/>
+    </select>
+
+    <select id="listAll" resultType="com.example.spring02.model.board.dto">
+        <include refid="paging_header"/>
+            select rownum, bno, title, content, b.regdate, viewcnt, name, show, (select count(*) from reply where bno=b.bno) cnt from board b, member m
+        <include refid="search"/>
+            order by bno desc, regdate desc
+        <include refid="paging_footer"/>
+    </select>
+
+    <select id="view" resultType="com.example.spring02.model.board.dto.BoardDTO">
+        select bno, title, content, b.regdate, viewcnt, name, writer, show
+        from board b, member m
+        where b.writer=m.userid and bno=#{bno}
+    </select>
+
+    <update id="increaseViewcnt">
+        update BOARD set title=#{title}, content=#{content} where bno=#{bno}
+    </update>
+
+    <update id="deleteArticle">
+        update BOARD set show='N' where bno=#{bno}
+    </update>
+
+    <sql id="search">
+        <choose>
+            <when test="search_option == 'all'">
+                where b.writer = m.userid and (name like '%'||#{keyword}||'%' or content like '%'||#{keyword}||'%' or title like '%'||#{keyword}||'%')
+            </when>
+            <otherwise>
+                where b.writer = m.userid and ${search_option} like '%'||#{keyword}||'%'
+            </otherwise>
+        </choose>
+    </sql>
+    <sql id="paging_header">
+        select * from (
+            select rownum as rn, A.*
+            from(
+    </sql>
+    <sql id="paging_footer">
+            )A
+        ) where rn between #{start} and #{end}
+    </sql>
+</mapper>
