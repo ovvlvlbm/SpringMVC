@@ -73,7 +73,7 @@ public class BoardDAOImpl implements BoardDAO {
     }
 
     @Override
-    public void updatAttach(String fullName, int bno) {
+    public void updateAttach(String fullName, int bno) {
         Map<String,Object> map = new HashMap<>();
         map.put("fullName", fullName);
         map.put("bno", bno);

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="reply">
+
+    <update id="update">
+        update reply set replyte=#{replytext} where rno=#{rno}
+    </update>
+    <delete id="delete">
+        delete from reply where rno=#{rno}
+    </delete>
+    <select id="detail" resultType="com.example.spring02.model.board.dto.ReplyDTO">
+        select * from reply where rno=#{rno}
+    </select>
+    <select id="count" resultType="int">
+        select count(*) from reply where bno=#{bno}
+    </select>
+    <insert id="insertReply">
+        insert into reply(rno,bno,replytext,replyer,secret_reply)
+        values(reply_seq.nextval, #{bno}, #{replytext}, #{replyer},#{secret_reply})
+    </insert>
+    <select id="listReply" resultType="com.example.spring02.model.board.dto.ReplyDTO">
+        <include refid="paging_header"/>
+            select rno,bno,replytext,replyer,name,r.regdate,r.updatedate,secret_reply,(select writer from board where bno=r.bno) writer
+            from reply r, member m where r.replyer=m.userid and bno=#{bno} order by rno desc
+        <include refid="paging_footer"/>
+    </select>
+    <sql id="paging_header">
+        select * from(select rownum as rn, A.* from(
+    </sql>
+    <sql id="paging_footer">
+        )A )where rn between #{start} and #{end}
+    </sql>
+</mapper>

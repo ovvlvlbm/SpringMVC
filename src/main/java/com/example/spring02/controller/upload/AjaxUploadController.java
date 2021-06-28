@@ -1,5 +1,6 @@
 package com.example.spring02.controller.upload;
 
+import com.example.spring02.service.board.BoardService;
 import com.example.spring02.util.MediaUtils;
 import com.example.spring02.util.UploadFileUtils;
 import org.apache.commons.io.IOUtils;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.inject.Inject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -22,6 +24,9 @@ import java.util.Objects;
 
 @Controller
 public class AjaxUploadController {
+    @Inject
+    BoardService boardService;
+
     @Resource(name = "uploadPath") //from servlet.xml
     String uploadPath;
 
@@ -104,6 +109,7 @@ public class AjaxUploadController {
         File file = new File(uploadPath+fileName.replace('/',File.separatorChar));
         if(file.exists()){
             try {
+                //boardService.deleteFile(fileName);
                 if(file.delete()){
                     System.out.println("The deletion has been completed.");
                 }else{

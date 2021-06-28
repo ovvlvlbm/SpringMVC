@@ -100,4 +100,12 @@ public class BoardDTO {
     public void setShow(String show) {
         this.show = show;
     }
+
+    public String[] getFiles() {
+        return files;
+    }
+
+    public void setFiles(String[] files) {
+        this.files = files;
+    }
 }
