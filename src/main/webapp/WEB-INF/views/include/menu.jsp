@@ -15,9 +15,9 @@
 <a href="${path}/chart/chart2.do">GoogleChart(db)</a> |
 <a href="${path}/jchart/chart1.do">JFreeChart(png)</a> |
 <a href="${path}/jchart/chart2.do">JFreeChart(pdf)</a> |
-<a href="${path}/upload/uploadAjax">File upload</a>
-<a href="${path}/email/write.do">Send Email</a>
-<a href="${path}/board/list.do">Board</a>
+<a href="${path}/upload/uploadAjax">File upload</a> |
+<a href="${path}/email/write.do">Send Email</a> |
+<a href="${path}/board/list.do">Board</a> |
 
 <div style="text-align:right;">
     <c:choose>

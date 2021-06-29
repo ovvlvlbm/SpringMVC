@@ -105,13 +105,15 @@ public class AjaxUploadController {
                 }
             }
         }
+
         //파일삭제. If a file exists, try to delete it.
         File file = new File(uploadPath+fileName.replace('/',File.separatorChar));
         if(file.exists()){
             try {
-                //boardService.deleteFile(fileName);
-                if(file.delete()){
+                if(file.delete()){  //if the file is successfully deleted,
                     System.out.println("The deletion has been completed.");
+                    //delete the record
+                    boardService.deleteFile(fileName);
                 }else{
                     System.out.println("The deletion has been failed.");
                 }

@@ -30,7 +30,7 @@
         <include refid="search"/>
     </select>
 
-    <select id="listAll" resultType="com.example.spring02.model.board.dto">
+    <select id="listAll" resultType="com.example.spring02.model.board.dto.BoardDTO">
         <include refid="paging_header"/>
             select rownum, bno, title, content, b.regdate, viewcnt, name, show, (select count(*) from reply where bno=b.bno) cnt from board b, member m
         <include refid="search"/>
@@ -46,6 +46,10 @@
 
     <update id="increaseViewcnt">
         update BOARD set title=#{title}, content=#{content} where bno=#{bno}
+    </update>
+
+    <update id="updateArticle">
+        update board set title=#{title}, content=#{content} where bno=#{bno}
     </update>
 
     <update id="deleteArticle">

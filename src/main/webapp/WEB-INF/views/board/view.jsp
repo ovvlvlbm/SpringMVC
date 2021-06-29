@@ -4,8 +4,8 @@
     <title>Title</title>
     <%@ include file="../include/header.jsp"%>
     <script src="${path}/WEB-INF/views/include/js/common.js"></script>
-    <script src="${path}/WEB-INF/views/ckeditor/ckeditor.js"></script>
     <script>
+
         $(function(){
             $("#btnList").click(function(){
                 location.href="${path}/board/list.do";
@@ -39,7 +39,6 @@
                     }
                 });
             });
-
             listAttach();
 
             $("#uploadedList").on("click",".flie_del", function(e){
@@ -72,25 +71,27 @@
                 }
             });
         });
+
         function listAttach(){
             $.ajax({
                 type:"post",
                 url:"${path}/board/getAttach/${dto.bno}",
                 success: function(list){
                     $(list).each(function(){
-                        var fileInfo=getFileInfo(this);
-                        var html="<div><a href='"+fileInfo.getLink+"'>"+fileInfo.fileName+"</a>&nbsp;&nbsp;";
+                        const fileInfo = getFileInfo(this)
+                        let html = "<div><a href='" + fileInfo.getLink + "'>" + fileInfo.fileName + "</a>&nbsp;&nbsp;"
                         html+="<a href='#' class='file_del' data-src='"+this+"'>[삭제]</a></div>";
                         $("#uploadedList").append(html);
                     });
                 }
             });
         }
+
         function reply(){
-            var replytext=$("replytext").val();
-            var bno=${dto.bno};
-            var secret_reply=$("#secret_reply").is(":checked") === true ? "y" : "n";
-            var param = {"replytext": replytext, "bno":bno, "secret_reply":secret_reply};
+            const replytext = $("replytext").val();
+            const bno=${dto.bno};
+            const secret_reply=$("#secret_reply").is(":checked") === true ? "y" : "n";
+            const param = {"replytext": replytext, "bno": bno, "secret_reply":secret_reply};
             $.ajax({
                 type:"post",
                 url:"${path}/reply/insert.do",
@@ -101,6 +102,7 @@
                 }
             });
         }
+
         function listReply2(){
             $.ajax({
                 type:"get",
@@ -108,17 +110,19 @@
                 url: "${path}/reply/list_json.do?bno=${dto.bno}",
                 success:function(result){
                     console.log(result);
-                    var output="<table>";
-                    for(var i in result){
-                        var repl=result[i].replytext;
-                        repl = repl.replace(/\n/gi,"<br>");
-                        repl = repl.replace(/  /gi,"&nbsp;&nbsp;");
-                        output+="<tr>";
-                        output+="<td>"+result[i].name;
-                        output+="("+changeDate(result[i].regdate)+")";
-                        output+="<br>"+repl;
-                        output+="<input type='button' value='Modify' onclick='showModify(\""+result[i].rno+"\")'>";
-                        output+="</td></tr>";
+                    let output="<table>";
+                    for(const i in result){
+                        if(result.hasOwnProperty(i)) {
+                            let repl = result[i].replytext;
+                            repl = repl.replace(/\n/gi, "<br>");
+                            repl = repl.replace(/  /gi, "&nbsp;&nbsp;");
+                            output += "<tr>";
+                            output += "<td>" + result[i].name;
+                            output += "(" + changeDate(result[i].regdate) + ")";
+                            output += "<br>" + repl;
+                            output += "<input type='button' value='Modify' onclick='showModify(\"" + result[i].rno + "\")'>";
+                            output += "</td></tr>";
+                        }
                     }
 
                     output+="</table>";
@@ -126,17 +130,18 @@
                 }
             });
         }
+
         function changeDate(date){
             date=new Date(parseInt(date));
-            year=date.getFullYear();
-            month=date.getMonth();
-            day=date.getDate();
-            hour=date.getHours();
-            minute=date.getMinutes();
-            second=date.getSeconds();
-            strDate=year+"-"+month+"-"+day+"-"+hour+":"+minute+":"+second;
-            return strDate;
+            const year=date.getFullYear();
+            const month=date.getMonth();
+            const day=date.getDate();
+            const hour=date.getHours();
+            const minute=date.getMinutes();
+            const second=date.getSeconds();
+            return year + "-" + month + "-" + day + "-" + hour + ":" + minute + ":" + second; //originally strDate but it is redundant.
         }
+
         function listReply(num){
             $.ajax({
                 type:"get",
@@ -146,6 +151,7 @@
                 }
             });
         }
+
         function showModify(rno){
             $.ajax({
                 type:"get",
@@ -172,15 +178,11 @@
     <form id="form1" name="form1" method="post">
         <div>작성일자: <fmt:formatDate value="${dto.regdate}" pattern="yyyy-MM-dd a HH:mm:ss"/> </div>
         <div>조회수: ${dto.viewcnt}</div>
-        <div>조회수: ${dto.name}</div>
-        <div>제목: <input name="title" value="${dto.title}"></div>
-        <div style="width: 80%;">내용: <textarea rows="3" cols="80" name="content" id="content">${dto.content}</textarea></div>
-        <script>
-            CKEDITOR.replace("content",{
-                filebrowserUploadUrl: "${path}/imageUpload.do",
-                height:"800px"
-            });
-        </script>
+        <div>이름: ${dto.name}</div>
+        <div><label>제목: <input name="title" value="${dto.title}"></label></div>
+        <div style="width: 80%;">
+            <label for="content">내용: </label><textarea rows="3" cols="80" name="content" id="content">${dto.content}</textarea>
+        </div>
 
         <div id="uploadedList"></div>
         <div class="fileDrop"></div>
@@ -195,8 +197,8 @@
     </form>
     <div style="width: 700px; text-align: center;">
         <c:if test="${sessionScope.userid!=null}">
-            <textarea rows="5" cols="80" id="replytext" placeholder="댓글을 작성하세요"></textarea><br>
-            <input type="checkbox" id="secret_reply">비밀댓글
+            <label for="replytext"></label><textarea rows="5" cols="80" id="replytext" placeholder="댓글을 작성하세요"></textarea><br>
+            <input type="checkbox" id="secret_reply"><label for="secret_reply">비밀댓글</label>
             <button type="button" id="btnReply">댓글쓰기</button>
         </c:if>
     </div>

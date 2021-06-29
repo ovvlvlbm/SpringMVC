@@ -2,11 +2,13 @@ package com.example.spring02.service.board;
 
 import com.example.spring02.model.board.dao.ReplyDAO;
 import com.example.spring02.model.board.dto.ReplyDTO;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+@Service
 public class ReplyServiceImpl implements ReplyService{
     @Inject
     ReplyDAO replyDao;

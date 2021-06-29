@@ -3,6 +3,7 @@ package com.example.spring02.controller.board;
 import com.example.spring02.model.board.dto.BoardDTO;
 import com.example.spring02.service.board.BoardService;
 import com.example.spring02.service.board.Pager;
+import com.example.spring02.service.board.ReplyService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,6 +19,8 @@ import java.util.Map;
 public class BoardController {
     @Inject
     BoardService boardService;
+    @Inject
+    ReplyService replyService;
 
     @RequestMapping(value = "write.do", method = RequestMethod.GET)
     public String write(){
@@ -40,7 +43,7 @@ public class BoardController {
         int end=pager.getPageEnd();
         List<BoardDTO> list=boardService.listAll(start, end, search_option, keyword);
         ModelAndView mav=new ModelAndView();
-        mav.setViewName("write");
+        mav.setViewName("board/list");
         Map<String,Object> map=new HashMap<String,Object>();
         map.put("list", list);
         map.put("count", count);
@@ -57,7 +60,7 @@ public class BoardController {
         ModelAndView mav=new ModelAndView();
         mav.setViewName("board/view");
         mav.addObject("dto", boardService.read(bno));
-//        mav.addObject("count", replyService.count(bno));
+        mav.addObject("count", replyService.count(bno));
         mav.addObject("curPage", curPage);
         mav.addObject("search_option", search_option);
         mav.addObject("keyword", keyword);

@@ -5,7 +5,7 @@
     <%@ include file="../include/header.jsp"%>
     <script>
         $(document).ready(function(){
-            $("#btnLogin").click(function(){
+            $("#btnWrite").click(function(){
                 location.href="${path}/board/write.do";
             });
         });
@@ -18,24 +18,28 @@
     <%@ include file="../include/menu.jsp"%>
     <h2>게시판</h2>
     <form name="form1" method="post" action="${path}/board/list.do">
-        <select name="search_option">
-            <option value="all"
-                    <c:out value="${map.search_option=='name'?'selected':"}"/>  >이름+내용+제목</option>
-            <option value="name"
-                    <c:out value="${map.search_option=='content'?'selecte':"}"/> >이름</option>
-            <option value="content"
-                    <c:out value="${map.search_option=='content'?'selecte':"}"/> >내용</option>
-            <option value="title"
-                    <c:out value="${map.search_option=='title'?'selecte':"}"/> >제목</option>
-        </select>
-        <input name="keyword" value="${map.keyword}">
+        <label>
+            <select name="search_option">
+                <option value="all"
+                        <c:out value="${map.search_option == 'all'?'selected':''}"/>>이름+내용+제목</option>
+                <option value="name"
+                        <c:out value="${map.search_option=='name'?'selecte':''}"/> >이름</option>
+                <option value="content"
+                        <c:out value="${map.search_option=='content'?'selecte':''}"/> >내용</option>
+                <option value="title"
+                        <c:out value="${map.search_option=='title'?'selecte':''}"/> >제목</option>
+            </select>
+        </label>
+        <label>
+            <input name="keyword" value="${map.keyword}">
+        </label>
         <input type="submit" value="조회">
         <c:if test="${sessionScope.userid!=null}">
             <button type="button" id="btnWrite">글쓰기</button>
         </c:if>
     </form>
     ${map.count}개의 게시물이 있습니다.
-    <table border="1" width="600px">
+    <table border-style="1" border-width="600px">
         <tr>
             <th>번호</th>
             <th>제목</th>
@@ -50,7 +54,7 @@
                             <td>${row.bno}</td>
                             <td>
                                 <a href="${path}/board/view.do?bno=${row.bno}
-                                    &curPage=#{map.pager.curPage}
+                                    &curPage=${map.pager.curPage}
                                     &search_option=${map.search_option}
                                     &keyword=${map.keyword}">${row.title}</a>
                                 <c:if test="${row.cnt > 0}">
@@ -69,9 +73,9 @@
                         <td colspan="5" align="center">
                             <c:if test="${row.cnt>0}">
                                 <a href="${path}/board/view.do?bno=${row.bno}
-                                   &curPage=${map.pager.curPage}
-                                   &search_option=${map.search_option}
-                                   &keyword=${map.keyword}">삭제된 게시물입니다.</a>
+                                    &curPage=${map.pager.curPage}
+                                    &search_option=${map.search_option}
+                                    &keyword=${map.keyword}">삭제된 게시물입니다.</a>
                                 <span style="color:red;">(${row.cnt})</span>
                             </c:if>
                             <c:if test="${row.cnt==0}"> 삭제된 게시물입니다. </c:if>
